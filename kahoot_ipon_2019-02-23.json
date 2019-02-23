@@ -1,0 +1,428 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2019-02-23T16:18:05.008Z",
+	"__export_source": "insomnia.desktop.app:v6.3.2",
+	"resources": [
+		{
+			"_id": "wrk_8cab382eeae94addb5b7a5bcd3cfd308",
+			"created": 1550653192011,
+			"description": "",
+			"modified": 1550908783670,
+			"name": "kahoot_ipon",
+			"parentId": null,
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_ab65f2902f6c4dc1bf1b4faa5473dbe7",
+			"color": null,
+			"created": 1550653192046,
+			"data": {
+				"codewars_api": "https://www.codewars.com/api/v1",
+				"dev_server": "http://localhost:4444",
+				"prod_server": "https://cdn.makersinstitute.id"
+			},
+			"isPrivate": false,
+			"metaSortKey": 1544488546416,
+			"modified": 1550653192046,
+			"name": "New Environment",
+			"parentId": "wrk_8cab382eeae94addb5b7a5bcd3cfd308",
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_ac5883334dcb47d7a058f827fc180b09",
+			"cookies": [
+				{
+					"creation": "2019-02-12T04:48:08.494Z",
+					"domain": "pokeapi.co",
+					"expires": "2020-02-12T04:48:08.000Z",
+					"hostOnly": false,
+					"httpOnly": true,
+					"id": "528676887657483",
+					"key": "__cfduid",
+					"lastAccessed": "2019-02-12T04:48:08.494Z",
+					"path": "/",
+					"secure": true,
+					"value": "dfba66d406eaa2e3262c0c416cb25dd1c1549946888"
+				},
+				{
+					"creation": "2019-02-19T02:47:20.223Z",
+					"domain": "codewars.com",
+					"expires": "2020-02-19T02:47:21.000Z",
+					"hostOnly": false,
+					"httpOnly": true,
+					"id": "3974096627481205",
+					"key": "__cfduid",
+					"lastAccessed": "2019-02-19T02:47:20.223Z",
+					"path": "/",
+					"secure": true,
+					"value": "d1df5aaa5b7f2a9376d976ccb06d91e1c1550544441"
+				}
+			],
+			"created": 1550653192074,
+			"modified": 1550653192074,
+			"name": "Default Jar",
+			"parentId": "wrk_8cab382eeae94addb5b7a5bcd3cfd308",
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"created": 1550653192303,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1550629448178,
+			"modified": 1550653192303,
+			"name": "kahoot-server",
+			"parentId": "wrk_8cab382eeae94addb5b7a5bcd3cfd308",
+			"_type": "request_group"
+		},
+		{
+			"_id": "req_ca280828a35e4bd6b61d114b018e825e",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"quiz-id\": 125,\n\t\"question-number\": 1,\n\t\"question\": \"bakalan di hapus kan?\",\n\t\"answer\": \"A\",\n\t\"options\": {\n\t\t\"A\": \"Ya\",\n\t\t\"B\": \"Tidak\",\n\t\t\"C\": \"Mungkin\",\n\t\t\"D\": \"Bisa jadi\"\n\t}\n}"
+			},
+			"created": 1550653192343,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_c173fe7d30254615b83b219a629aa0ab",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550634835027,
+			"method": "POST",
+			"modified": 1550933161430,
+			"name": "Create Question",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/question",
+			"_type": "request"
+		},
+		{
+			"_id": "req_1cacf8f7b5bb4a6c9e6b8358e92e1a57",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"quiz-id\": 125,\n\t\"quiz-name\": \"name nya bakal dihapus kok\",\n\t\"quiz-category\": \"hapusing\",\n\t\"question-list\": []\n}"
+			},
+			"created": 1550653192400,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_337bd61c4b3a4361aeabbfb3c5d764b6",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550647538986,
+			"method": "POST",
+			"modified": 1550935966914,
+			"name": "Create Quiz",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/quiz",
+			"_type": "request"
+		},
+		{
+			"_id": "req_22786d71f2cd436da70b723762b91c3b",
+			"authentication": {},
+			"body": {},
+			"created": 1550653192419,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550857058780,
+			"method": "GET",
+			"modified": 1550935170145,
+			"name": "Quiz Data",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/quizzes/125",
+			"_type": "request"
+		},
+		{
+			"_id": "req_e41e656cf9ab43d8a2e8338e993e0f4d",
+			"authentication": {},
+			"body": {},
+			"created": 1550653192438,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550850192188.875,
+			"method": "GET",
+			"modified": 1550935779687,
+			"name": "That Question",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/quizzes/123/questions/1",
+			"_type": "request"
+		},
+		{
+			"_id": "req_ff4162729dbf4b139bae8f3876032c13",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"answer\": \"A\",\n\t\"quiz-id\": 123,\n\t\"question-number\": 1,\n\t\"username\": \"Danurannisa\",\n\t\"game-pin\": 927102\n}"
+			},
+			"created": 1550714386955,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_6d37c1a6b54d4cdebdfb386d1fe61596",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550714386955,
+			"method": "POST",
+			"modified": 1550739467679,
+			"name": "Answer",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/game/answer",
+			"_type": "request"
+		},
+		{
+			"_id": "req_83364af0fdd64ed5a3934c3aa229bb29",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"quiz-id\": 123\n}"
+			},
+			"created": 1550720052269,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_20f36a3b47f14fedbb40eea68beebd70",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550720052269,
+			"method": "POST",
+			"modified": 1550720109978,
+			"name": "Create Game",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/game",
+			"_type": "request"
+		},
+		{
+			"_id": "req_4a667a792b5a49f9b3c611ae28c5352d",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"game-pin\": 927102,\n\t\"username\": \"Danurannisa\"\n}"
+			},
+			"created": 1550722134674,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_987adb7b686c4b2f97c6268820e70acc",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550722134674,
+			"method": "POST",
+			"modified": 1550739349656,
+			"name": "Join Game",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/game/join",
+			"_type": "request"
+		},
+		{
+			"_id": "req_e261f69a3a334901b319d22636d599bc",
+			"authentication": {},
+			"body": {},
+			"created": 1550725162935,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550843325597.75,
+			"method": "GET",
+			"modified": 1550916289128,
+			"name": "Leaderboard",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/game/927102/leaderboard",
+			"_type": "request"
+		},
+		{
+			"_id": "req_7de3895c5302463796aa284a80462164",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"user-id\": 4,\n\t\"username\": \"neofa\",\n\t\"password\": \"4dong\",\n\t\"email\": \"neofa@gmail.com\"\n}"
+			},
+			"created": 1550800388641,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_3b4a6f5f6a3f42879959407398052349",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550800388641,
+			"method": "POST",
+			"modified": 1550907133430,
+			"name": "Registration",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/registration",
+			"_type": "request"
+		},
+		{
+			"_id": "req_8841ddc55a1743a2a164a5f8c5562862",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"username\": \"iponsarif\",\n\t\"password\": \"1dong\"\n}"
+			},
+			"created": 1550802126051,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_befb5d4aa9dc4d6f8541be5611d0b4aa",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550802126051,
+			"method": "POST",
+			"modified": 1550907105570,
+			"name": "Login",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/login",
+			"_type": "request"
+		},
+		{
+			"_id": "req_9b1584ba7aee4157ae2d93cccad325db",
+			"authentication": {},
+			"body": {},
+			"created": 1550911991509,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550911991509,
+			"method": "DELETE",
+			"modified": 1550934164570,
+			"name": "Delete Quiz",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/quizzes/125",
+			"_type": "request"
+		},
+		{
+			"_id": "req_55a8d5c41d93459cbe9816af4761eb94",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"quiz-id\": 125,\n\t\"quiz-category\": \"category diubah coy\",\n\t\"quiz-name\": \"name diubah coy\"\n}"
+			},
+			"created": 1550921607664,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_7cc82e2fa46c4ceeb97f2c69dc75c5c1",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550921607664,
+			"method": "PUT",
+			"modified": 1550934974116,
+			"name": "Edit Quiz",
+			"parameters": [],
+			"parentId": "fld_193bc2fed8054a279627a360fe1b0ad8",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "localhost:14045/quizzes/125",
+			"_type": "request"
+		}
+	]
+}
