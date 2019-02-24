@@ -59,11 +59,15 @@ def getQuiz(quizId):
     quizzesFile = open(quizzesFilePath)
     quizzesData = json.load(quizzesFile)
 
+    quizFound = False
     for quiz in quizzesData["quizzes"]:
         if quiz["quiz-id"] == int(quizId):
             quizData = quiz
+            quizFound = True
             break
 
+    if not quizFound:
+        return jsonify("quiz-id " + str(quizId) + " tidak ditemukan")
     # nyari soalnya
     questionsFile = open(questionsFilePath)
     questionData = json.load(questionsFile)
@@ -75,13 +79,19 @@ def getQuiz(quizId):
     return jsonify(quizData)
 
 # minta data sebuah soal untuk kuis tertentu
-@app.route('/quizzes/<quizId>/questions/<questionNumber>') # methods=["GET", "PUT", "DELETE"] PUT = edit
+@app.route('/quizzes/<quizId>/questions/<questionNumber>') # methods=["GET", "PUT", "DELETE"] PUT = update
 def getThatQuestion(quizId, questionNumber):
     quizData = getQuiz(int(quizId)).json
 
+    questionFound = False
     for question in quizData["question-list"]:
         if question["question-number"] == int(questionNumber):
+            questionFound = True
             return jsonify(question)
+    
+    if not questionFound: # validasi kalo questionNumber ga ada
+        return jsonify("Question Number " + str(questionNumber) + " tidak ditemukan")
+            
 
 @app.route('/game', methods=['POST'])
 def createGame():
@@ -198,7 +208,6 @@ def submitAnswer():
 
 @app.route('/game/<gamePin>/leaderboard')
 def getLeaderboard(gamePin):
-    #body = request.json
     gamesFile = open(gamesFilePath)
     gamesData = json.load(gamesFile)
 
@@ -237,8 +246,7 @@ def registration():
     usersFile = open(usersFilePath, 'w')
     usersFile.write(str(json.dumps(userData)))
 
-    return jsonify(body)
-
+    return jsonify(userData)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -256,13 +264,14 @@ def login():
             userFound = True
             if decrypt(user["password"]) == body["password"]: # password di database di-decrypt dulu
                 passwordMatched = True
+                break
 
     if userFound and passwordMatched:
-        result = "Selamat datang, " + body["username"]        
+        return jsonify(user)
+        # result = "Selamat datang, " + body["username"]        
     else:
-        result = "Username atau password tidak sesuai"
-
-    return result
+        return jsonify("Username atau password tidak sesuai")
+        # result = "Username atau password tidak sesuai"
 
 # encrypt pake caesar chiper
 shift = 2
@@ -293,17 +302,16 @@ def decrypt(password):
     decryptedPassword = ''.join(listPassword)    
     return decryptedPassword
 
-# delete quis sama edit informasi tentang kuisnya
+# delete quis sama ubah informasi tentang kuisnya
 @app.route('/quizzes/<quizId>', methods=["PUT", "DELETE"])
-def editDeleteQuiz(quizId):
+def updateDeleteQuiz(quizId):
     if request.method == "DELETE":
         return deleteQuiz(quizId)
     elif request.method == "PUT":
-        return editQuiz(quizId)
+        return updateQuiz(quizId)
 
 # fungsi hapus quiz berdasarkan quiz-id
 def deleteQuiz(quizId):
-    # nyari lalu hapus quiz
     quizzesFile = open(quizzesFilePath)
     quizData = json.load(quizzesFile)
 
@@ -313,10 +321,10 @@ def deleteQuiz(quizId):
         if quiz["quiz-id"] == int(quizId): # nyari indeks quiz yg akan dihapus
             del quizData["quizzes"][i] # hapus quiz
             quizData["totalQuizAvailable"] -= 1 # kurangi total quiz
-            message = "Berhasil menghapus quiz id " + quizId
+            # message = "Berhasil menghapus quiz id " + quizId
             break
-        else:
-            message = "Gagal menghapus. Tidak ada quiz-id " + quizId
+        # else:
+        #     message = "Gagal menghapus. Tidak ada quiz-id " + quizId
 
     quizzesFile = open(quizzesFilePath, 'w')
     quizzesFile.write(str(json.dumps(quizData)))
@@ -333,7 +341,7 @@ def deleteQuiz(quizId):
 
             if question["quiz-id"] == int(quizId):
                 del questionData["questions"][i]
-                message2 = " dan menghapus semua questionnya "
+                # message2 = " dan menghapus semua questionnya "
 
     # looping untuk hapus 1 question sisa
     for j in range(i-2,len(questionData["questions"])):
@@ -341,18 +349,18 @@ def deleteQuiz(quizId):
 
         if question["quiz-id"] == int(quizId):
             del questionData["questions"][j]
-            message2 = " dan menghapus semua questionnya "
+            # message2 = " dan menghapus semua questionnya "
             break
 
     questionsFile = open(questionsFilePath, 'w')
     questionsFile.write(str(json.dumps(questionData)))
 
-    return message + message2
+    return jsonify(quizData)
 
 # fungsi ubah quiz berdasarkan quiz-id
-def editQuiz(quizId):
+def updateQuiz(quizId):
     body = request.json
-
+    
     quizzesFile = open(quizzesFilePath)
     quizData = json.load(quizzesFile)
 
@@ -365,17 +373,66 @@ def editQuiz(quizId):
             quiz["quiz-category"] = body["quiz-category"]
             
             quizData["quizzes"][i] = quiz
-            message = "Berhasil mengubah quiz id " + quizId
+            # message = "Berhasil mengubah quiz id " + quizId
             break
-        else:
-            message = "Gagal mengubah. Tidak ada quiz-id " + quizId
+        # else:
+        #     message = "Gagal mengubah. Tidak ada quiz-id " + quizId
 
     quizzesFile = open(quizzesFilePath, 'w')
     quizzesFile.write(str(json.dumps(quizData)))
 
-    return message
+    return jsonify(quizData)
 
-# def deleteQuestion(quizId, questionId):
+@app.route('/quizzes/<quizId>/questions/<questionNumber>', methods=["PUT", "DELETE"])
+def updateDeleteQuestion(quizId, questionNumber):
+    if request.method == "DELETE":
+        return deleteQuestion(quizId, questionNumber)
+    elif request.method == "PUT":
+        return updateQuestion(quizId, questionNumber)
+
+def deleteQuestion(quizId, questionNumber):
+    questionsFile = open(questionsFilePath)
+    questionData = json.load(questionsFile)
+    
+    questionToBeDeleted = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
+
+    for i in range(len(questionData["questions"])):
+        if questionData["questions"][i] == questionToBeDeleted:
+            del questionData["questions"][i]
+            # message = "Berhasil menghapus question Number " + questionNumber + " dari quiz id " + quizId
+            break
+        # else:
+        #     message = "Gagal menghapus. Tidak ada quiz-id " + quizId + " atau question Number " + questionNumber
+
+    questionsFile = open(questionsFilePath, 'w')
+    questionsFile.write(str(json.dumps(questionData)))
+
+    return jsonify(questionData)
+
+def updateQuestion(quizId, questionNumber):
+    body = request.json
+    
+    questionsFile = open(questionsFilePath)
+    questionData = json.load(questionsFile)
+
+    questionToBeUpdated = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
+    
+    for i in range(len(questionData["questions"])):
+        if questionData["questions"][i] == questionToBeUpdated:
+            # questionData["questions"][i]["quiz-id"] = body["quiz-id"] # ga bisa update quiz-id-nya kayanya
+            questionData["questions"][i]["question-number"] = body["question-number"]
+            questionData["questions"][i]["question"] = body["question"]
+            questionData["questions"][i]["answer"] = body["answer"]
+            questionData["questions"][i]["options"]["A"] = body["options"]["A"]
+            questionData["questions"][i]["options"]["B"] = body["options"]["B"]
+            questionData["questions"][i]["options"]["C"] = body["options"]["C"]
+            questionData["questions"][i]["options"]["D"] = body["options"]["D"]
+            break
+
+    questionsFile = open(questionsFilePath, 'w')
+    questionsFile.write(str(json.dumps(questionData)))
+
+    return jsonify(questionData)
 
 if __name__ == "__main__":
     app.run(debug=True, port=14045)
