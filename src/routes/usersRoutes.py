@@ -1,9 +1,11 @@
 from flask import request, json, jsonify
 import os
 
+from . import router, usersFileLocation
+
 from ..utils.crypt import encrypt, decrypt
 from ..utils.file import readFile, writeFile
-from . import router, usersFileLocation
+from ..utils.authorization import generateToken
 
 # registrasi
 @router.route('/users', methods=['POST'])
@@ -37,6 +39,7 @@ def login():
             # userFound = True
             if decrypt(user["password"]) == body["password"]: # password di database di-decrypt dulu
                 isLogin = True
+                body["token"] = generateToken(body["username"])
                 break
 
     body["status"] = isLogin

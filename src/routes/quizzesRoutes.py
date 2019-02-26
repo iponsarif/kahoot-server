@@ -1,13 +1,16 @@
-from flask import request, json, jsonify
+from flask import request, json, jsonify, g
 import os
 
 from . import router, quizzesFileLocation, questionsFileLocation
 from ..utils.file import readFile, writeFile
+from ..utils.authorization import verifyLogin
 
 # bikin kuis baru
 @router.route('/quizzes', methods=['POST'])
+@verifyLogin
 def createQuiz():
     body = request.json
+    print("usernamenya adalah",g.username)
 
     quizData = {
         "total-quiz-available": 0,
