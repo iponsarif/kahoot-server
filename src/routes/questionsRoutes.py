@@ -1,6 +1,8 @@
 from flask import request, json, jsonify
 import os
+
 from . import router, getQuiz, questionsFileLocation
+from ..utils.file import readFile, writeFile
 
 # bikin soal untuk kuis yang udah ada
 @router.route('/questions', methods=['POST'])
@@ -12,12 +14,11 @@ def createQuestion():
     }
 
     if os.path.exists(questionsFileLocation):
-        questionFile = open(questionsFileLocation, 'r')
-        questionData = json.load(questionFile)
+        questionData = readFile(questionsFileLocation)
 
-    questionFile = open(questionsFileLocation, 'w')
     questionData["questions"].append(body)
-    questionFile.write(str(json.dumps(questionData)))
+    
+    writeFile(questionsFileLocation, questionData)
 
     return jsonify(questionData)
 
@@ -43,8 +44,7 @@ def updateDeleteQuestion(quizId, questionNumber):
         return updateQuestion(quizId, questionNumber)
 
 def deleteQuestion(quizId, questionNumber):
-    questionsFile = open(questionsFileLocation)
-    questionData = json.load(questionsFile)
+    questionData = readFile(questionsFileLocation)
     
     questionToBeDeleted = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
 
@@ -56,16 +56,14 @@ def deleteQuestion(quizId, questionNumber):
         # else:
         #     message = "Gagal menghapus. Tidak ada quiz-id " + quizId + " atau question Number " + questionNumber
 
-    questionsFile = open(questionsFileLocation, 'w')
-    questionsFile.write(str(json.dumps(questionData)))
+    writeFile(questionsFileLocation, questionData)
 
     return jsonify(questionData)
 
 def updateQuestion(quizId, questionNumber):
     body = request.json
     
-    questionsFile = open(questionsFileLocation)
-    questionData = json.load(questionsFile)
+    questionData = readFile(questionsFileLocation)
 
     questionToBeUpdated = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
     
@@ -81,7 +79,6 @@ def updateQuestion(quizId, questionNumber):
             questionData["questions"][i]["options"]["D"] = body["options"]["D"]
             break
 
-    questionsFile = open(questionsFileLocation, 'w')
-    questionsFile.write(str(json.dumps(questionData)))
+    writeFile(questionsFileLocation, questionData)
 
     return jsonify(questionData)

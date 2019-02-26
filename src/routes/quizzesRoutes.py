@@ -1,6 +1,8 @@
 from flask import request, json, jsonify
 import os
+
 from . import router, quizzesFileLocation, questionsFileLocation
+from ..utils.file import readFile, writeFile
 
 # bikin kuis baru
 @router.route('/quizzes', methods=['POST'])
@@ -13,14 +15,12 @@ def createQuiz():
     }    
 
     if os.path.exists(quizzesFileLocation) and os.path.getsize(quizzesFileLocation) > 0:
-        quizzesFile = open(quizzesFileLocation, 'r')
-        quizData = json.load(quizzesFile)
+        quizData = readFile(quizzesFileLocation)
 
     quizData["total-quiz-available"] += 1
     quizData["quizzes"].append(body)
 
-    quizzesFile = open(quizzesFileLocation, 'w')
-    quizzesFile.write(str(json.dumps(quizData)))
+    writeFile(quizzesFileLocation, quizData)
 
     return jsonify(quizData)
 
@@ -28,8 +28,7 @@ def createQuiz():
 @router.route('/quizzes/<quizId>')
 def getQuiz(quizId):
     # nyari quiznya
-    quizzesFile = open(quizzesFileLocation)
-    quizzesData = json.load(quizzesFile)
+    quizzesData = readFile(quizzesFileLocation)
 
     quizFound = False
     for quiz in quizzesData["quizzes"]:
@@ -41,8 +40,7 @@ def getQuiz(quizId):
     if not quizFound:
         return jsonify("quiz-id " + str(quizId) + " tidak ditemukan")
     # nyari soalnya
-    questionsFile = open(questionsFileLocation)
-    questionData = json.load(questionsFile)
+    questionData = readFile(questionsFileLocation)
 
     for question in questionData["questions"]:
         if question["quiz-id"] == int(quizId):
@@ -60,8 +58,7 @@ def updateDeleteQuiz(quizId):
 
 # fungsi hapus quiz berdasarkan quiz-id
 def deleteQuiz(quizId):
-    quizzesFile = open(quizzesFileLocation)
-    quizData = json.load(quizzesFile)
+    quizData = readFile(quizzesFileLocation)
 
     for i in range(len(quizData["quizzes"])):
         quiz = quizData["quizzes"][i]
@@ -74,12 +71,11 @@ def deleteQuiz(quizId):
         # else:
         #     message = "Gagal menghapus. Tidak ada quiz-id " + quizId
 
-    quizzesFile = open(quizzesFileLocation, 'w')
-    quizzesFile.write(str(json.dumps(quizData)))
+    # save ke file
+    writeFile(quizzesFileLocation, quizData)
 
     # nyari question sesuai quiz-id lalu hapus 
-    questionsFile = open(questionsFileLocation)
-    questionData = json.load(questionsFile)
+    questionData = readFile(questionsFileLocation)
 
     # message2 = ""
     # looping ini sisa 1 question dg quiz-id sama, belum bisa semua hapus dalam 1 for(karena out of range)
@@ -100,8 +96,7 @@ def deleteQuiz(quizId):
             # message2 = " dan menghapus semua questionnya "
             break
 
-    questionsFile = open(questionsFileLocation, 'w')
-    questionsFile.write(str(json.dumps(questionData)))
+    writeFile(questionsFileLocation, questionData)
 
     return jsonify(quizData)
 
@@ -109,8 +104,7 @@ def deleteQuiz(quizId):
 def updateQuiz(quizId):
     body = request.json
     
-    quizzesFile = open(quizzesFileLocation)
-    quizData = json.load(quizzesFile)
+    quizData = readFile(quizzesFileLocation)
 
     # pake spread
     # quizData = {
@@ -132,7 +126,6 @@ def updateQuiz(quizId):
         # else:
         #     message = "Gagal mengubah. Tidak ada quiz-id " + quizId
 
-    quizzesFile = open(quizzesFileLocation, 'w')
-    quizzesFile.write(str(json.dumps(quizData)))
+    writeFile(quizzesFileLocation, quizData)
 
     return jsonify(quizData)
