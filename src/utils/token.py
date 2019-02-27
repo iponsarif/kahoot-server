@@ -1,7 +1,6 @@
-import jwt
+import jwt, os
 from flask import abort
 from datetime import datetime, timedelta
-
 
 def encode(data):
     payload = {
@@ -11,12 +10,12 @@ def encode(data):
         # "iat": datetime.utcnow()
     }
     
-    encoded = jwt.encode(payload, "kucing-merah", algorithm="HS256").decode('utf-8')
+    encoded = jwt.encode(payload, os.getenv("SECRET"), algorithm="HS256").decode('utf-8')
     return encoded
 
 def decode(data):
     try:
-        decoded = jwt.decode(data, "kucing-merah", algorithms=["HS256"])
+        decoded = jwt.decode(data, os.getenv("SECRET"), algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
         abort(403)
 

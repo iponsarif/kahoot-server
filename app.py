@@ -10,6 +10,8 @@ def jwtEncode():
     encoded = jwt.encode({"data": "makers"}, "kucing-merah", algorithm="HS256")
     return encoded
 
+a = "bisa ga ini coy di debug"
+print(a)
 @app.route('/decode', methods=["POST"])
 def jwtDecode():
     decoded = jwt.decode(request.json["token"], "kucing-merah", algorithms=["HS256"])
