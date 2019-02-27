@@ -1,11 +1,13 @@
-from flask import request, json, jsonify
+from flask import request, json, jsonify, abort
 import os
 
 from . import router, getQuiz, questionsFileLocation
 from ..utils.file import readFile, writeFile
+from ..utils.authorization import verifyLogin
 
 # bikin soal untuk kuis yang udah ada
 @router.route('/questions', methods=['POST'])
+@verifyLogin
 def createQuestion():
     body = request.json
 
@@ -27,14 +29,19 @@ def createQuestion():
 def getThatQuestion(quizId, questionNumber):
     quizData = getQuiz(int(quizId)).json
 
-    questionFound = False
-    for question in quizData["question-list"]:
-        if question["question-number"] == int(questionNumber):
-            questionFound = True
-            return jsonify(question)
-    
-    if not questionFound: # validasi kalo questionNumber ga ada
-        return jsonify("Question Number " + str(questionNumber) + " tidak ditemukan")
+    try:
+        for question in quizData["data"]["question-list"]:
+            if question["question-number"] == int(questionNumber):
+                return jsonify(question)
+        raise Exception("Soal Gaketemu")
+    except ValueError:
+        abort(404)
+    except TypeError:
+        abort(403)
+    except Exception:
+        print("asd")
+        abort(404)
+
 
 @router.route('/quizzes/<quizId>/questions/<questionNumber>', methods=["PUT", "DELETE"])
 def updateDeleteQuestion(quizId, questionNumber):

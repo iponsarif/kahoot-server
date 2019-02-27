@@ -115,23 +115,38 @@ def submitAnswer():
 
 @router.route('/game/<gamePin>/leaderboard')
 def getLeaderboard(gamePin):
-    gamesData = readFile(gamesFileLocation)
+    isGamePinFound = False
+    response = {
+        "error" : True
+    }
 
-    for game in gamesData["game-list"]:
-        if game["game-pin"] == int(gamePin): #body["game-pin"]
-            leaderboard = game["leaderboard"]
-            break
+    try:
+        gamesData = readFile(gamesFileLocation)
+    except:
+        response["message"] = "error load games data"
+        return jsonify(response)
+    else:        
+        for game in gamesData["game-list"]:
+            if game["game-pin"] == int(gamePin): #body["game-pin"]
+                leaderboard = game["leaderboard"]
+                isGamePinFound = True
+                break
     
-    # todo: sorting dari score terbesar ke terkecil (selection sort)        
-    for i in range(len(leaderboard)):
-        largest = leaderboard[i]["score"]
-        largestPosition = leaderboard[i]
-        for j in range(i,len(leaderboard)):
-            if leaderboard[j]["score"] >= largest:
-                largest = leaderboard[j]["score"]
-                largestPosition = leaderboard[j]
-                positionCounter = j
+    if isGamePinFound:
+        # Descending using selection sort
+        for i in range(len(leaderboard)):
+            largest = leaderboard[i]["score"]
+            largestPosition = leaderboard[i]
+            for j in range(i,len(leaderboard)):
+                if leaderboard[j]["score"] >= largest:
+                    largest = leaderboard[j]["score"]
+                    largestPosition = leaderboard[j]
+                    positionCounter = j
 
-        leaderboard[i], leaderboard[positionCounter] = largestPosition, leaderboard[i] # swap posisi pertama setiap looping dengan posisi largest
+            leaderboard[i], leaderboard[positionCounter] = largestPosition, leaderboard[i] # swap posisi pertama setiap looping dengan posisi largest
+        
+        response["data"] = leaderboard
+    else:
+        response["message"] = "Game pin not found"
 
-    return jsonify(leaderboard)
+    return jsonify(response)

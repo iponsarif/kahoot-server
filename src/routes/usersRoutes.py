@@ -10,20 +10,39 @@ from ..utils.authorization import generateToken
 # registrasi
 @router.route('/users', methods=['POST'])
 def registration():
-    print(os.getenv("API_KEY"))
+    isUsernameOrEmailUsed = False
     body = request.json
-    body["password"] = encrypt(body["password"]) # encrypt dulu password sebelum masuk database
     
-    userData = []
+    response = {
+        "error": True
+    }
+    
+    usersData = {
+        "total-user-registered": 0,
+        "user-list": []
+    }
 
-    if os.path.exists(usersFileLocation) and os.path.getsize(usersFileLocation) > 0:
-        userData = readFile(usersFileLocation)
+    try:
+        usersData = readFile(usersFileLocation)
+    except:
+        print("file ga ketemu/error")
+    else:
+        for data in usersData["user-list"]:
+            if data["username"] == body["username"] or data["email"] == body["email"]:
+                isUsernameOrEmailUsed = True
+    
+    if not isUsernameOrEmailUsed:
+        usersData["total-user-registered"] += 1
+        body["password"] = encrypt(body["password"])
+        usersData["user-list"].append(body)        
+        
+        response["data"] = body
+        writeFile(usersFileLocation, usersData)
+    else:
+        del body["password"]
+        response["message"] = "username of email is used"
 
-    userData.append(body)
-
-    writeFile(usersFileLocation, userData)
-
-    return jsonify(userData)
+    return jsonify(response)
 
 @router.route('/users/login', methods=['POST'])
 def login():
@@ -34,7 +53,7 @@ def login():
     isLogin = False
     # passwordMatched = False
 
-    for user in usersData:        
+    for user in usersData["user-list"]:        
         if user["username"] == body["username"]:
             # userFound = True
             if decrypt(user["password"]) == body["password"]: # password di database di-decrypt dulu

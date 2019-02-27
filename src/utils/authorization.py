@@ -16,10 +16,9 @@ def verifyLogin(f):
     @wraps(f)
     def decoratedFunction(*args, **kwargs):
         # body = request.json
-        # Bearer token
-        # 01234567
+        # if "Authorization" 
+
         token = request.headers["Authorization"][7:]
-        # getData = jwt.decode(body["token"], "kucing-merah", algorithms=["HS256"])
 
         data = decode(token)
         username = decrypt(data["data"])

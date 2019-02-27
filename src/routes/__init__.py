@@ -14,3 +14,4 @@ from .usersRoutes import *
 from .quizzesRoutes import *
 from .questionsRoutes import *
 from .gamesRoutes import *
+from .errorRoutes import *
