@@ -31,7 +31,7 @@ def createQuiz():
     return jsonify(quizData)
 
 # meminta data kuis dan soalnya
-@router.route('/quizzes/<quizId>')
+@router.route('/quizzes/<int:quizId>')
 def getQuiz(quizId):
     # nyari quiznya
     isQuizFound = False
@@ -46,7 +46,7 @@ def getQuiz(quizId):
         return jsonify(response)
     else:
         for quiz in quizzesData["quizzes"]:
-            if quiz["quiz-id"] == int(quizId):
+            if quiz["quiz-id"] == quizId:
                 quizData = quiz
                 isQuizFound = True
 
@@ -62,7 +62,7 @@ def getQuiz(quizId):
             print("File questions gada")
         else:
             for question in questionData["questions"]:
-                if question["quiz-id"] == int(quizId):
+                if question["quiz-id"] == quizId:
                     quizData["question-list"].append(question)
     else:
         response["message"] = "no quiz found"
@@ -70,10 +70,10 @@ def getQuiz(quizId):
     return jsonify(response)
 
 # delete quis sama ubah informasi tentang kuisnya
-@router.route('/quizzes/<quizId>', methods=["PUT", "DELETE"])
-@verifyLogin
+@router.route('/quizzes/<int:quizId>', methods=["PUT", "DELETE"])
+# @verifyLogin()
 def updateDeleteQuiz(quizId):
-    print("usernamenya adalah",g.username)
+    # print("usernamenya adalah",g.username)
     if request.method == "DELETE":
         return deleteQuiz(quizId)
     elif request.method == "PUT":
@@ -86,7 +86,7 @@ def deleteQuiz(quizId):
     for i in range(len(quizData["quizzes"])):
         quiz = quizData["quizzes"][i]
 
-        if quiz["quiz-id"] == int(quizId): # nyari indeks quiz yg akan dihapus
+        if quiz["quiz-id"] == quizId: # nyari indeks quiz yg akan dihapus
             del quizData["quizzes"][i] # hapus quiz
             quizData["total-quiz-available"] -= 1 # kurangi total quiz
             # message = "Berhasil menghapus quiz id " + quizId
@@ -106,7 +106,7 @@ def deleteQuiz(quizId):
         if i < len(questionData["questions"]):
             question = questionData["questions"][i]
 
-            if question["quiz-id"] == int(quizId):
+            if question["quiz-id"] == quizId:
                 del questionData["questions"][i]
                 # message2 = " dan menghapus semua questionnya "
 
@@ -114,7 +114,7 @@ def deleteQuiz(quizId):
     for j in range(i-2,len(questionData["questions"])):
         question = questionData["questions"][j]
 
-        if question["quiz-id"] == int(quizId):
+        if question["quiz-id"] == quizId:
             del questionData["questions"][j]
             # message2 = " dan menghapus semua questionnya "
             break
@@ -138,7 +138,7 @@ def updateQuiz(quizId):
     for i in range(len(quizData["quizzes"])):
         quiz = quizData["quizzes"][i]
 
-        if quiz["quiz-id"] == int(quizId): # nyari indeks quiz yg akan didelete
+        if quiz["quiz-id"] == quizId: # nyari indeks quiz yg akan didelete
             quiz["quiz-id"] = body["quiz-id"] # hapus line ini kalau quiz-id ga bisa diubah
             quiz["quiz-name"] = body["quiz-name"]
             quiz["quiz-category"] = body["quiz-category"]

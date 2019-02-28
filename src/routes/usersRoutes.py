@@ -14,7 +14,7 @@ def registration():
     body = request.json
     
     response = {
-        "error": True
+        "error": False
     }
     
     usersData = {

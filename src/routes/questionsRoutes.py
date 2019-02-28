@@ -25,13 +25,13 @@ def createQuestion():
     return jsonify(questionData)
 
 # minta data sebuah soal untuk kuis tertentu
-@router.route('/quizzes/<quizId>/questions/<questionNumber>') # methods=["GET", "PUT", "DELETE"] PUT = update
+@router.route('/quizzes/<int:quizId>/questions/<int:questionNumber>') # methods=["GET", "PUT", "DELETE"] PUT = update
 def getThatQuestion(quizId, questionNumber):
-    quizData = getQuiz(int(quizId)).json
+    quizData = getQuiz(quizId).json
 
     try:
         for question in quizData["data"]["question-list"]:
-            if question["question-number"] == int(questionNumber):
+            if question["question-number"] == questionNumber:
                 return jsonify(question)
         raise Exception("Soal Gaketemu")
     except ValueError:
@@ -43,7 +43,7 @@ def getThatQuestion(quizId, questionNumber):
         abort(404)
 
 
-@router.route('/quizzes/<quizId>/questions/<questionNumber>', methods=["PUT", "DELETE"])
+@router.route('/quizzes/<int:quizId>/questions/<int:questionNumber>', methods=["PUT", "DELETE"])
 def updateDeleteQuestion(quizId, questionNumber):
     if request.method == "DELETE":
         return deleteQuestion(quizId, questionNumber)
@@ -53,7 +53,7 @@ def updateDeleteQuestion(quizId, questionNumber):
 def deleteQuestion(quizId, questionNumber):
     questionData = readFile(questionsFileLocation)
     
-    questionToBeDeleted = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
+    questionToBeDeleted = getThatQuestion(quizId, questionNumber).json # ambil dari fungsi getThatQuestion
 
     for i in range(len(questionData["questions"])):
         if questionData["questions"][i] == questionToBeDeleted:
@@ -72,7 +72,7 @@ def updateQuestion(quizId, questionNumber):
     
     questionData = readFile(questionsFileLocation)
 
-    questionToBeUpdated = getThatQuestion(int(quizId), int(questionNumber)).json # ambil dari fungsi getThatQuestion
+    questionToBeUpdated = getThatQuestion(quizId, questionNumber).json # ambil dari fungsi getThatQuestion
     
     for i in range(len(questionData["questions"])):
         if questionData["questions"][i] == questionToBeUpdated:
