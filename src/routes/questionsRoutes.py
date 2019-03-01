@@ -6,11 +6,11 @@ from ..utils.file import readFile, writeFile
 from ..utils.authorization import verifyLogin
 
 # bikin soal untuk kuis yang udah ada
-@router.route('/questions', methods=['POST'])
+@router.route('/quizzes/<int:quizId>/questions', methods=['POST'])
 @verifyLogin
-def createQuestion():
+def createQuestion(quizId):
     body = request.json
-
+    body["quiz-id"] = quizId
     questionData = {
         "questions": []
     }
