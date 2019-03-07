@@ -15,9 +15,6 @@ def generateToken(data):
 def verifyLogin(f):
     @wraps(f)
     def decoratedFunction(*args, **kwargs):
-        # body = request.json
-        # if "Authorization" 
-
         token = request.headers["Authorization"][7:]
 
         data = decode(token)

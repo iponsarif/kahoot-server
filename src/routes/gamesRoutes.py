@@ -5,13 +5,10 @@ from random import randint
 from . import router, quizzesFileLocation, gamesFileLocation, questionsFileLocation
 from ..utils.file import readFile, writeFile
 
-@router.route('/game', methods=['POST'])
+@router.route('/games', methods=['POST'])
 def createGame():
     body = request.json
 
-    # dapetin info quiz
-    # quizzesFile = open(quizzesFileLocation)
-    # quizzesData = json.load(quizzesFile)
     quizzesData = readFile(quizzesFileLocation)
 
     for quiz in quizzesData["quizzes"]:
@@ -36,7 +33,7 @@ def createGame():
 
     return jsonify(gameInfo)
 
-@router.route('/game/join', methods=['POST'])
+@router.route('/games/join', methods=['POST'])
 def joinGame():
     body = request.json
 
@@ -66,7 +63,7 @@ def joinGame():
 
     return jsonify(gameInfo)
 
-@router.route('/game/answer', methods=['POST'])
+@router.route('/games/answer', methods=['POST'])
 def submitAnswer():    
     isTrue = False
     body = request.json
@@ -75,8 +72,6 @@ def submitAnswer():
     questionData = readFile(questionsFileLocation)
 
     for question in questionData["questions"]:
-        question = json.loads(question)        
-
         if question["quiz-id"] == int(body["quiz-id"]) and question["question-number"] == int(body["question-number"]):
             if question["answer"] == body["answer"]:
                 isTrue = True
@@ -113,7 +108,7 @@ def submitAnswer():
     return jsonify(request.json)
 
 
-@router.route('/game/<gamePin>/leaderboard')
+@router.route('/games/<gamePin>/leaderboard')
 def getLeaderboard(gamePin):
     isGamePinFound = False
     response = {

@@ -41,7 +41,8 @@ def registration():
         del body["password"]
     else:
         del body["password"]
-        response["message"] = "username of email is used"
+        response["message"] = "username or email is used"
+        response["error"] = True
 
     return jsonify(response)
 
@@ -67,7 +68,7 @@ def login():
         body["message"] = "Berhasil Login"
         del body["password"]
     else:
-        del body["password"]
         body["message"] = "Username atau password tidak sesuai"
+        del body["password"]
 
     return jsonify(body)

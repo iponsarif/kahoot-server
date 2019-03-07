@@ -5,7 +5,7 @@ from . import router
 def error403(e):
     messages = {
         "status-code": 403,
-        "message": "you belom login kayaknya, atau belom m"
+        "message": "you belom login kayaknya, atau tokennya expired"
     }
     return jsonify(messages)
 
